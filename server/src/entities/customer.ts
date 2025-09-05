@@ -1,0 +1,43 @@
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+  UpdateDateColumn,
+} from 'typeorm';
+import { User } from './user';
+
+@Entity({ name: 'customers' })
+export class Customer {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ name: 'address', type: 'simple-json' })
+  address: {
+    state: string;
+    city: string;
+    country: string;
+  };
+
+  @Column({ type: 'varchar', length: 255 })
+  phone: string;
+
+  @Column({ type: 'bool', default: false })
+  isConfirmed: boolean;
+
+  @Column({ name: 'user_id', type: 'uuid' })
+  userId: string;
+
+  @OneToOne(() => User, user => user.customer, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  user: Relation<User>;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+}
