@@ -3,11 +3,15 @@ import { UserService } from '../services/user.service';
 import sendResponse from '../utils/response';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../utils/appError';
+import { injectable } from 'inversify';
+import { inject } from 'inversify';
+import userTypes from '../types/userTypes.type';
 
+@injectable()
 export class UserController {
   private userService: UserService;
-  constructor() {
-    this.userService = new UserService();
+  constructor(@inject(userTypes.UserService) userService: UserService) {
+    this.userService = userService;
   }
 
   createUser = async (req: Request, res: Response, next: NextFunction) => {

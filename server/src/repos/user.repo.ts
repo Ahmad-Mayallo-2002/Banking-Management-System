@@ -4,7 +4,9 @@ import { AppDataSource } from '../data-source';
 import { Roles } from '../enums/roles';
 import AppError from '../utils/appError';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { injectable } from 'inversify';
 
+@injectable()
 export class UserRepo {
   private userRepo: Repository<User>;
   constructor() {
