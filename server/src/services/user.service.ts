@@ -1,5 +1,5 @@
 import { User } from '../entities/user';
-import { UserRepo } from '../repositories/user.repo';
+import { UserRepo } from '../repos/user.repo';
 
 export class UserService {
   private repo: UserRepo;

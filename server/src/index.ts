@@ -4,7 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import session from 'express-session';
 import { config } from 'dotenv';
-import globalErrorHandler from './middlewares/errorHandler';
+import globalErrorHandler from './utils/errorHandler';
 import { AppDataSource } from './data-source';
 import sendResponse from './utils/response';
 import apiLogger from './middlewares/apiLogger';

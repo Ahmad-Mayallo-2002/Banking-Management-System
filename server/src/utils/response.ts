@@ -1,6 +1,6 @@
 import { Response } from 'express';
-import { BaseResponse } from '../types/baseResponse';
-import { Pagination } from '../types/pagination';
+import { BaseResponse } from '../interfaces/baseResponse';
+import { Pagination } from '../interfaces/pagination';
 
 function sendResponse<T>(
   statusCode: number,
