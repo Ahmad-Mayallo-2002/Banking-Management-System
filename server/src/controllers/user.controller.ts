@@ -13,9 +13,8 @@ export class UserController {
       const user = await userService.createUser(req.body);
       return sendResponse(StatusCodes.CREATED, 'User is Created', user, res);
     } catch (error: any) {
-      return next(
-        new AppError('Error creating user', StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST),
-      );
+      console.log(error);
+      return next(error);
     }
   }
 
@@ -27,17 +26,10 @@ export class UserController {
         return next(
           new AppError('Users not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND),
         );
-
       return sendResponse(StatusCodes.OK, 'Users retrieved successfully', users, res);
     } catch (error: any) {
       console.log(error);
-      return next(
-        new AppError(
-          'Error retrieving users',
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          ReasonPhrases.INTERNAL_SERVER_ERROR,
-        ),
-      );
+      return next(error);
     }
   }
 
@@ -52,13 +44,8 @@ export class UserController {
 
       return sendResponse(StatusCodes.OK, 'User retrieved successfully', user, res);
     } catch (error: any) {
-      return next(
-        new AppError(
-          'Error retrieving user',
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          ReasonPhrases.INTERNAL_SERVER_ERROR,
-        ),
-      );
+      console.log(error);
+      return next(error);
     }
   }
 
@@ -68,22 +55,10 @@ export class UserController {
       const { id } = req.params;
       const data = req.body;
       const success = await userService.updateUser(id, data);
-
-      if (!success) {
-        return next(
-          new AppError(
-            'User not found or no changes made',
-            StatusCodes.NOT_FOUND,
-            ReasonPhrases.NOT_FOUND,
-          ),
-        );
-      }
-
       return sendResponse(StatusCodes.OK, 'User updated successfully', null, res);
     } catch (error: any) {
-      return next(
-        new AppError('Error updating user', StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST),
-      );
+      console.log(error);
+      return next(error);
     }
   }
 
@@ -91,21 +66,11 @@ export class UserController {
   async deleteUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const success = await userService.deleteUser(id);
-
-      if (!success) {
-        return next(new AppError('User not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND));
-      }
-
+      await userService.deleteUser(id);
       return sendResponse(StatusCodes.OK, 'User deleted successfully', null, res);
     } catch (error: any) {
-      return next(
-        new AppError(
-          'Error deleting user',
-          StatusCodes.INTERNAL_SERVER_ERROR,
-          ReasonPhrases.INTERNAL_SERVER_ERROR,
-        ),
-      );
+      console.log(error);
+      return next(error);
     }
   }
 }
