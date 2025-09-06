@@ -3,12 +3,14 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user';
+import { Account } from './account';
 
 @Entity({ name: 'customers' })
 export class Customer {
@@ -22,15 +24,15 @@ export class Customer {
     country: string;
   };
 
-  @Column({ type: 'bool', default: false })
-  isConfirmed: boolean;
-
   @Column({ name: 'user_id', type: 'uuid' })
   userId: string;
 
   @OneToOne(() => User, user => user.customer, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: Relation<User>;
+
+  @OneToMany(() => Account, account => account.customer)
+  accounts: Relation<Account[]>;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

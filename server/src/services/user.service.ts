@@ -2,7 +2,6 @@ import { injectable } from 'inversify';
 import { User } from '../entities/user';
 import { UserRepo } from '../repos/user.repo';
 import { inject } from 'inversify';
-import TypeInject from '../types/userTypes.type';
 import userTypes from '../types/userTypes.type';
 import { UserInput } from '../zod/user.validation';
 

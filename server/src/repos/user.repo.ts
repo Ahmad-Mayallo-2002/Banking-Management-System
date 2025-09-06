@@ -44,6 +44,7 @@ export class UserRepo {
     const savedUser = await this.userRepo.save(user);
     const customer = this.customerRepo.create({
       userId: savedUser.id,
+      user,
       address: input.address,
     });
     await this.customerRepo.save(customer);
@@ -63,36 +64,32 @@ export class UserRepo {
   async findById(id: string): Promise<User> {
     const user = await this.userRepo.findOne({
       where: { id, role: Roles.CUSTOMER },
-      relations: ['customers'],
+      relations: ['customer'],
     });
     if (!user) throw new AppError('User not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     return user;
   }
+
   async update(id: string, input: Partial<UserInput>): Promise<boolean> {
     const user = await this.findById(id);
+    const updateData: Partial<User> = {};
 
     if (input.email) {
       const exists = await this.userRepo.findOne({ where: { email: input.email } });
-      if (exists && exists.id !== id) {
+      if (exists)
         throw new AppError('Email already in use', StatusCodes.CONFLICT, ReasonPhrases.CONFLICT);
-      }
+      updateData.email = input.email;
     }
 
-    const updateData: Partial<User> = {};
-
     if (input.username) updateData.username = input.username;
-    if (input.email) updateData.email = input.email;
     if (input.phone) updateData.phone = input.phone;
     if (input.password) updateData.password = await hash(input.password, 10);
     if (input.avatar) {
+      v2.api.delete_all_resources([user.avatar.public_id]);
       const { secure_url, public_id } = await uploadToCloudinary(input.avatar);
       updateData.avatar = { url: secure_url, public_id };
-      v2.api.delete_all_resources([user.avatar.public_id]);
     }
-
-    // 🔹 Merge and save
-    const merged = this.userRepo.merge(user, updateData);
-    await this.userRepo.save(merged);
+    await this.userRepo.update(id, updateData);
     return true;
   }
 
