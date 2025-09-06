@@ -1,15 +1,11 @@
 import { config } from 'dotenv';
 import { NextFunction, Request, Response } from 'express';
-import { JwtPayload, verify } from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 import AppError from '../utils/appError';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 config();
 
-interface AuthRequest extends Request {
-  user: string | JwtPayload;
-}
-
-function authorization(req: AuthRequest, res: Response, next: NextFunction) {
+function authorization(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization;
   const token: string | undefined = authHeader?.split(' ')[1];
   if (!token) {

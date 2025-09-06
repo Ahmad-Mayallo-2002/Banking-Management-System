@@ -16,10 +16,13 @@ export class UserController {
 
   createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await this.userService.createUser(req.body);
+      const input = {
+        ...req.body,
+        avatar: req.file,
+      };
+      const user = await this.userService.createUser(input);
       return sendResponse(StatusCodes.CREATED, 'User is Created', user, res);
     } catch (error: any) {
-      console.log(error);
       return next(error);
     }
   };
@@ -70,6 +73,16 @@ export class UserController {
       const { id } = req.params;
       await this.userService.deleteUser(id);
       return sendResponse(StatusCodes.OK, 'User deleted successfully', null, res);
+    } catch (error: any) {
+      console.log(error);
+      return next(error);
+    }
+  };
+
+  seedAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await this.userService.seedAdmin();
+      return sendResponse(StatusCodes.CREATED, 'Admin is created', null, res);
     } catch (error: any) {
       console.log(error);
       return next(error);

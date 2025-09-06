@@ -22,9 +22,6 @@ export class Customer {
     country: string;
   };
 
-  @Column({ type: 'varchar', length: 255 })
-  phone: string;
-
   @Column({ type: 'bool', default: false })
   isConfirmed: boolean;
 

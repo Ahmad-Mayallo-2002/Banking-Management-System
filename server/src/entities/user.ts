@@ -30,6 +30,9 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  phone: string;
+
   @Column({ type: 'enum', enum: Roles, default: Roles.CUSTOMER })
   role: Roles;
 
