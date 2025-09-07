@@ -4,6 +4,7 @@ import { UserRepo } from '../repos/user.repo';
 import { inject } from 'inversify';
 import userTypes from '../types/userTypes.type';
 import { UserInput } from '../zod/user.validation';
+import { Customer } from '../entities/customer';
 
 @injectable()
 export class UserService {
@@ -34,5 +35,13 @@ export class UserService {
 
   async seedAdmin(): Promise<boolean> {
     return await this.repo.seedAdmin();
+  }
+
+  async getCustomers(): Promise<Customer[]> {
+    return await this.repo.findCustomers();
+  }
+
+  async getCustomerById(userId: string): Promise<Customer> {
+    return await this.repo.findCustomerById(userId);
   }
 }

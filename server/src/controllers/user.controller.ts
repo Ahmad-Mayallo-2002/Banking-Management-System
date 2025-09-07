@@ -38,9 +38,18 @@ export class UserController {
   getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = await this.userService.getUserById((req as any).user.id);
-      if (!user)
-        return next(new AppError('User not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND));
       return sendResponse(StatusCodes.OK, 'User retrieved successfully', user, res);
+    } catch (error: any) {
+      console.log(error);
+      return next(error);
+    }
+  };
+
+  // Get is by user id
+  getCustomerById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const customer = await this.userService.getCustomerById((req as any).user.id);
+      return sendResponse(StatusCodes.OK, 'Customer retrieved successfully', customer, res);
     } catch (error: any) {
       console.log(error);
       return next(error);
@@ -59,8 +68,7 @@ export class UserController {
 
   updateUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const input = req.body;
-      const success = await this.userService.updateUser((req as any).user.id, input);
+      const success = await this.userService.updateUser((req as any).user.id, req.body);
       return sendResponse(StatusCodes.OK, 'User updated successfully', null, res);
     } catch (error: any) {
       console.log(error);
@@ -73,10 +81,6 @@ export class UserController {
   getUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const users = await this.userService.getUsers();
-      if (!users.length)
-        return next(
-          new AppError('Users not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND),
-        );
       return sendResponse(StatusCodes.OK, 'Users retrieved successfully', users, res);
     } catch (error: any) {
       console.log(error);
@@ -88,9 +92,27 @@ export class UserController {
     try {
       const { id } = req.params;
       const user = await this.userService.getUserById(id);
-      if (!user)
-        return next(new AppError('User not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND));
       return sendResponse(StatusCodes.OK, 'User retrieved successfully', user, res);
+    } catch (error: any) {
+      console.log(error);
+      return next(error);
+    }
+  };
+
+  getCustomers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const customers = await this.userService.getCustomers();
+      return sendResponse(StatusCodes.OK, 'Customers retrieved successfully', customers, res);
+    } catch (error: any) {
+      console.log(error);
+      return next(error);
+    }
+  };
+
+  getCustomerByIdByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const customer = await this.userService.getCustomerById(req.params.id);
+      return sendResponse(StatusCodes.OK, 'Customer retrieved successfully', customer, res);
     } catch (error: any) {
       console.log(error);
       return next(error);

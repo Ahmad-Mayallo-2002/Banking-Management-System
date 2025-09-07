@@ -9,7 +9,6 @@ import { AppDataSource } from './data-source';
 import sendResponse from './utils/response';
 import apiLogger from './middlewares/apiLogger';
 import user from './routes/user.route';
-import customer from './routes/customer.route';
 import { StatusCodes } from 'http-status-codes';
 config();
 
@@ -33,7 +32,6 @@ app.use(
 );
 app.use(apiLogger);
 app.use('/api', user);
-app.use('/api', customer);
 
 AppDataSource.initialize();
 

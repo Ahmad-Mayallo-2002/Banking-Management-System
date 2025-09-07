@@ -80,7 +80,6 @@ export class UserRepo {
         throw new AppError('Email already in use', StatusCodes.CONFLICT, ReasonPhrases.CONFLICT);
       updateData.email = input.email;
     }
-
     if (input.username) updateData.username = input.username;
     if (input.phone) updateData.phone = input.phone;
     if (input.password) updateData.password = await hash(input.password, 10);
@@ -89,6 +88,8 @@ export class UserRepo {
       const { secure_url, public_id } = await uploadToCloudinary(input.avatar);
       updateData.avatar = { url: secure_url, public_id };
     }
+    if (input.address) await this.customerRepo.update({ userId: id }, { address: input.address });
+
     await this.userRepo.update(id, updateData);
     return true;
   }
@@ -125,5 +126,22 @@ export class UserRepo {
     });
     await this.userRepo.save(newAdmin);
     return true;
+  }
+
+  async findCustomers(): Promise<Customer[]> {
+    const customers = await this.customerRepo.find({ relations: ['user', 'accounts'] });
+    if (!customers.length)
+      throw new AppError('Customers not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    return customers;
+  }
+
+  async findCustomerById(userId: string): Promise<Customer> {
+    const customer = await this.customerRepo.findOne({
+      where: { userId },
+      relations: ['user', 'accounts'],
+    });
+    if (!customer)
+      throw new AppError('Customer not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    return customer;
   }
 }
