@@ -6,7 +6,7 @@ import { injectable } from 'inversify';
 import { UserRepo } from '../repos/user.repo';
 import { User } from '../entities/user.entity';
 import { UserInput } from '../zod/user.validation';
-import userTypes from '../types/user-types.type';
+import userTypes from '../types/user.type';
 import uploadToCloudinary from '../utils/cloudinaryUpload';
 import { hash } from 'bcryptjs';
 import { Roles } from '../enums/roles.enum';
@@ -148,14 +148,19 @@ export class UserService {
   }
 
   async validateCode(code: string): Promise<string> {
-    const cachedCode = await redis.get("code");
-    if (code !== cachedCode) throw new AppError("Invalid verification code", StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST);
+    const cachedCode = await redis.get('code');
+    if (code !== cachedCode)
+      throw new AppError(
+        'Invalid verification code',
+        StatusCodes.BAD_REQUEST,
+        ReasonPhrases.BAD_REQUEST,
+      );
     await redis.del('code');
     return 'Code is validated successfully';
   }
 
   async updatePassword(password: string, confirmPassword: string): Promise<string> {
-    const email = await redis.get('email') as string;
+    const email = (await redis.get('email')) as string;
     await this.repo.updatePassword(email, password);
     return 'Password is updated successfully';
   }

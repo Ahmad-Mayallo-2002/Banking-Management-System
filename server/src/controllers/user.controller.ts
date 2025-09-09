@@ -4,7 +4,7 @@ import sendResponse from '../utils/response';
 import { StatusCodes } from 'http-status-codes';
 import { injectable } from 'inversify';
 import { inject } from 'inversify';
-import userTypes from '../types/user-types.type';
+import userTypes from '../types/user.type';
 import { userInputSchema } from '../zod/user.validation';
 import { ZodError } from 'zod';
 

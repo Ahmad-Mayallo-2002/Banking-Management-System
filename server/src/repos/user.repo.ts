@@ -3,7 +3,6 @@ import { User } from "../entities/user.entity";
 import { Customer } from "../entities/customer.entity";
 import { AppDataSource } from "../data-source";
 import { injectable } from "inversify";
-import { hash } from "crypto";
 
 @injectable()
 export class UserRepo {
