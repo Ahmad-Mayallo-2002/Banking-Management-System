@@ -5,7 +5,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../utils/appError';
 import { injectable } from 'inversify';
 import { inject } from 'inversify';
-import userTypes from '../types/userTypes.type';
+import userTypes from '../types/user-types.type';
 import { userInputSchema } from '../zod/user.validation';
 import { ZodError } from 'zod';
 

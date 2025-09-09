@@ -8,10 +8,10 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { TransactionStatus, TransactionType } from '../enums/transactions';
-import { Customer } from './customer';
-import { Loan } from './loan';
-import { Account } from './account';
+import { TransactionStatus, TransactionType } from '../enums/transactions.enum';
+import { Customer } from './customer.entity';
+import { Loan } from './loan.entity';
+import { Account } from './account.entity';
 
 @Entity({ name: 'transactions' })
 export class Transaction {

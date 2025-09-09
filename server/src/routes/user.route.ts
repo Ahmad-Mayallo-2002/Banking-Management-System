@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user.controller';
 import UserContainer from '../inversify/user.config';
-import userTypes from '../types/userTypes.type';
-import upload from '../middlewares/multer';
-import isAdmin from '../middlewares/isAdmin';
-import authorization from '../middlewares/authorization';
+import userTypes from '../types/user-types.type';
+import upload from '../middlewares/multer.middleware';
+import isAdmin from '../middlewares/is-admin.middleware';
+import authorization from '../middlewares/authorization.middleware';
 
 const router = Router();
 const userController = UserContainer.get<UserController>(userTypes.UserController);

@@ -1,6 +1,6 @@
 import { Container } from 'inversify';
 import { UserRepo } from '../repos/user.repo';
-import userTypes from '../types/userTypes.type';
+import userTypes from '../types/user-types.type';
 import { UserService } from '../services/user.service';
 import { UserController } from '../controllers/user.controller';
 

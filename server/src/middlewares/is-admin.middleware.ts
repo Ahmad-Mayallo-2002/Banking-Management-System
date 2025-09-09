@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Roles } from '../enums/roles';
+import { Roles } from '../enums/roles.enum';
 import AppError from '../utils/appError';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 

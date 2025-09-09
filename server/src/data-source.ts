@@ -1,10 +1,10 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
-import { User } from './entities/user';
-import { Customer } from './entities/customer';
-import { Account } from './entities/account';
-import { Loan } from './entities/loan';
-import { Transaction } from './entities/transaction';
+import { User } from './entities/user.entity';
+import { Customer } from './entities/customer.entity';
+import { Account } from './entities/account.entity';
+import { Loan } from './entities/loan.entity';
+import { Transaction } from './entities/transaction.entity';
 
 config();
 

@@ -1,4 +1,4 @@
-import { Pagination } from './pagination';
+import { Pagination } from './pagination.interface';
 
 export interface BaseResponse<T> {
   statusCode: number;

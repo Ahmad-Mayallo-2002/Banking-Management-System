@@ -7,7 +7,7 @@ import { config } from 'dotenv';
 import globalErrorHandler from './utils/errorHandler';
 import { AppDataSource } from './data-source';
 import sendResponse from './utils/response';
-import apiLogger from './middlewares/apiLogger';
+import apiLogger from './middlewares/api-logger.middleware';
 import user from './routes/user.route';
 import { StatusCodes } from 'http-status-codes';
 config();
