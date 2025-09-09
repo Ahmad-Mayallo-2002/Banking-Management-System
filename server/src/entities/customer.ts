@@ -11,6 +11,8 @@ import {
 } from 'typeorm';
 import { User } from './user';
 import { Account } from './account';
+import { Loan } from './loan';
+import { Transaction } from './transaction';
 
 @Entity({ name: 'customers' })
 export class Customer {
