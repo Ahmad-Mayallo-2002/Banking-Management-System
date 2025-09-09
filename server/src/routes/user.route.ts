@@ -14,14 +14,19 @@ router.get('/get-user', authorization, userController.getUserById);
 router.delete('/delete-user', authorization, userController.deleteUser);
 router.put('/update-user', authorization, upload.single('avatar'), userController.updateUser);
 router.post('/seed-admin', userController.seedAdmin);
+router.post("/send-verification-code", userController.sendVerificationCode);
+router.post('/validate-code', userController.validateCode);
+router.put('/update-password', userController.updatePassword);
+
 
 // Admin APIs
-router.get('/get-users', userController.getUsers);
-router.get('/get-users/:id', userController.getUserByIdByAdmin);
-router.delete('/delete-user/:id', userController.deleteUserByAdmin);
+router.get('/get-users', authorization, isAdmin,userController.getUsers);
+router.get('/get-users/:id', authorization, isAdmin, userController.getUserByIdByAdmin);
+router.delete('/delete-user/:id', authorization, isAdmin, userController.deleteUserByAdmin);
 router.put(
   '/update-user/:id',
-
+  authorization,
+  isAdmin,
   upload.single('avatar'),
   userController.updateUserByAdmin,
 );

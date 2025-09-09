@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/user.service';
 import sendResponse from '../utils/response';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import AppError from '../utils/appError';
+import { StatusCodes } from 'http-status-codes';
 import { injectable } from 'inversify';
 import { inject } from 'inversify';
 import userTypes from '../types/user-types.type';
@@ -45,7 +44,7 @@ export class UserController {
     }
   };
 
-  // Get is by user id
+  // Get is done by user id
   getCustomerById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const customer = await this.userService.getCustomerById((req as any).user.id);
@@ -71,6 +70,39 @@ export class UserController {
       const success = await this.userService.updateUser((req as any).user.id, req.body);
       return sendResponse(StatusCodes.OK, 'User updated successfully', null, res);
     } catch (error: any) {
+      console.log(error);
+      return next(error);
+    }
+  };
+
+  sendVerificationCode = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.userService.sendVerificationCode(req.body.email);
+      return sendResponse(StatusCodes.OK, result, null, res);
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
+  };
+
+  validateCode = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.userService.validateCode(req.body.code);
+      return sendResponse(StatusCodes.OK, result, null, res);
+    } catch (error) {
+      console.log(error);
+      return next(error);
+    }
+  };
+
+  updatePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await this.userService.updatePassword(
+        req.body.password,
+        req.body.confirmPassword,
+      );
+      return sendResponse(StatusCodes.OK, result, null, res);
+    } catch (error) {
       console.log(error);
       return next(error);
     }

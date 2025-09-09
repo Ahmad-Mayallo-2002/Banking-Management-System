@@ -3,6 +3,7 @@ import { User } from "../entities/user.entity";
 import { Customer } from "../entities/customer.entity";
 import { AppDataSource } from "../data-source";
 import { injectable } from "inversify";
+import { hash } from "crypto";
 
 @injectable()
 export class UserRepo {
@@ -47,5 +48,10 @@ export class UserRepo {
 
   async findCustomerById(userId: string): Promise<Customer | null> {
     return this.customerRepo.findOne({ where: { userId }, relations: ['user', 'accounts'] });
+  }
+
+  async updatePassword(email: string, password: string): Promise<boolean> {
+    await this.userRepo.update({email}, {password});
+    return true;
   }
 }

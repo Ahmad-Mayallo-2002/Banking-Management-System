@@ -1,16 +1,18 @@
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import { Customer } from "../entities/customer.entity";
-import AppError from "../utils/appError";
-import { inject } from "inversify";
-import { injectable } from "inversify";
-import { UserRepo } from "../repos/user.repo";
-import { User } from "../entities/user.entity";
-import { UserInput } from "../zod/user.validation";
-import userTypes from "../types/user-types.type";
-import uploadToCloudinary from "../utils/cloudinaryUpload";
-import { hash } from "bcryptjs";
-import { Roles } from "../enums/roles.enum";
-import { v2 } from "cloudinary";
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { Customer } from '../entities/customer.entity';
+import AppError from '../utils/appError';
+import { inject } from 'inversify';
+import { injectable } from 'inversify';
+import { UserRepo } from '../repos/user.repo';
+import { User } from '../entities/user.entity';
+import { UserInput } from '../zod/user.validation';
+import userTypes from '../types/user-types.type';
+import uploadToCloudinary from '../utils/cloudinaryUpload';
+import { hash } from 'bcryptjs';
+import { Roles } from '../enums/roles.enum';
+import { v2 } from 'cloudinary';
+import { sendMail } from '../utils/sendMail';
+import { redis } from '../utils/redis';
 
 @injectable()
 export class UserService {
@@ -18,7 +20,12 @@ export class UserService {
 
   async createUser(data: UserInput): Promise<User> {
     const exists = await this.repo.findByEmail(data.email);
-    if (exists) throw new AppError('Email already exists', StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST);
+    if (exists)
+      throw new AppError(
+        'Email already exists',
+        StatusCodes.BAD_REQUEST,
+        ReasonPhrases.BAD_REQUEST,
+      );
 
     const { secure_url, public_id } = await uploadToCloudinary(data.avatar);
     const hashedPassword = await hash(data.password, 10);
@@ -42,7 +49,8 @@ export class UserService {
 
   async getUsers(): Promise<User[]> {
     const users = await this.repo.findAll();
-    if (!users.length) throw new AppError('Users not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    if (!users.length)
+      throw new AppError('Users not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     return users;
   }
 
@@ -58,7 +66,8 @@ export class UserService {
 
     if (data.email) {
       const exists = await this.repo.findByEmail(data.email);
-      if (exists) throw new AppError('Email already in use', StatusCodes.CONFLICT, ReasonPhrases.CONFLICT);
+      if (exists)
+        throw new AppError('Email already in use', StatusCodes.CONFLICT, ReasonPhrases.CONFLICT);
       updateData.email = data.email;
     }
 
@@ -117,13 +126,37 @@ export class UserService {
 
   async getCustomers(): Promise<Customer[]> {
     const customers = await this.repo.findCustomers();
-    if (!customers.length) throw new AppError('Customers not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    if (!customers.length)
+      throw new AppError('Customers not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     return customers;
   }
 
   async getCustomerById(userId: string): Promise<Customer> {
     const customer = await this.repo.findCustomerById(userId);
-    if (!customer) throw new AppError('Customer not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    if (!customer)
+      throw new AppError('Customer not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     return customer;
+  }
+
+  async sendVerificationCode(email: string): Promise<string> {
+    const user = await this.repo.findByEmail(email);
+    if (!user) throw new AppError('User not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    const code = await sendMail(email);
+    await redis.set('code', code);
+    await redis.set('email', email);
+    return 'Verification code is sent successfully';
+  }
+
+  async validateCode(code: string): Promise<string> {
+    const cachedCode = await redis.get("code");
+    if (code !== cachedCode) throw new AppError("Invalid verification code", StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST);
+    await redis.del('code');
+    return 'Code is validated successfully';
+  }
+
+  async updatePassword(password: string, confirmPassword: string): Promise<string> {
+    const email = await redis.get('email') as string;
+    await this.repo.updatePassword(email, password);
+    return 'Password is updated successfully';
   }
 }
