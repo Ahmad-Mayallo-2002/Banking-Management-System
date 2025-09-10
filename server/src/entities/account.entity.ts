@@ -20,8 +20,11 @@ export class Account {
   @Column({ type: 'decimal', default: 0 })
   amount: number;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: true })
   isActive: boolean;
+
+  @Column({ type: 'varchar', length: 255 })
+  password: string;
 
   @Column({ type: 'varchar', length: 255 })
   customer_id: string;
