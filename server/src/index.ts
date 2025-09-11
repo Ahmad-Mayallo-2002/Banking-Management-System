@@ -10,6 +10,8 @@ import sendResponse from './utils/response';
 import apiLogger from './middlewares/api-logger.middleware';
 import user from './routes/user.route';
 import account from './routes/account.route';
+import transaction from './routes/transaction.route';
+import loan from './routes/loan.route';
 import { StatusCodes } from 'http-status-codes';
 config();
 
@@ -34,6 +36,8 @@ app.use(
 app.use(apiLogger);
 app.use('/api', user);
 app.use('/api', account);
+app.use('/api', loan);
+app.use('/api', transaction);
 
 AppDataSource.initialize();
 
