@@ -9,4 +9,29 @@ export class LoanRepo {
   constructor() {
     this.loanRepo = AppDataSource.getRepository(Loan);
   }
+
+  async getAll(): Promise<Loan[]> {
+    return this.loanRepo.find({ relations: ['account'] });
+  }
+
+  async getById(id: string): Promise<Loan | null> {
+    return this.loanRepo.findOne({ where: { id }, relations: ['account'] });
+  }
+
+  async getByAccountId(accountId: string): Promise<Loan[]> {
+    return this.loanRepo.find({ where: { account: { id: accountId } }, relations: ['account'] });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.loanRepo.delete(id);
+  }
+
+  async create(data: Partial<Loan>): Promise<Loan> {
+    const newLoan = this.loanRepo.create(data);
+    return this.loanRepo.save(newLoan);
+  }
+
+  async save(loan: Loan): Promise<Loan> {
+    return this.loanRepo.save(loan);
+  }
 }

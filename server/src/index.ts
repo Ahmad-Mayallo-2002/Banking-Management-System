@@ -36,8 +36,8 @@ app.use(
 app.use(apiLogger);
 app.use('/api', user);
 app.use('/api', account);
-app.use('/api', loan);
 app.use('/api', transaction);
+app.use('/api', loan);
 
 AppDataSource.initialize();
 
