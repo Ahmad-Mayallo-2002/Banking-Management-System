@@ -13,7 +13,15 @@ import account from './routes/account.route';
 import transaction from './routes/transaction.route';
 import loan from './routes/loan.route';
 import { StatusCodes } from 'http-status-codes';
+import {
+  addTransactionalDataSource,
+  initializeTransactionalContext,
+  StorageDriver,
+} from 'typeorm-transactional';
 config();
+
+initializeTransactionalContext({ storageDriver: StorageDriver.ASYNC_LOCAL_STORAGE });
+addTransactionalDataSource(AppDataSource);
 
 const app = express();
 

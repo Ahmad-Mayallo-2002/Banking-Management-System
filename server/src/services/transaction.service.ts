@@ -10,6 +10,7 @@ import loanTypes from '../types/loan.type';
 import { LoanService } from './loan.service';
 import accountTypes from '../types/account.type';
 import { AccountService } from './account.service';
+import { Transactional } from 'typeorm-transactional';
 
 @injectable()
 export class TransactionService {
@@ -60,6 +61,7 @@ export class TransactionService {
     return 'Transaction is deleted successfully';
   }
 
+  @Transactional()
   async create(input: Partial<Transaction>): Promise<string> {
     const { type, amount, source_id, destination_id } = input;
 

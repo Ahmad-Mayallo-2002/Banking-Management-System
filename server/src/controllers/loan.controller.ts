@@ -32,7 +32,7 @@ export class LoanController {
   getAccountLoans = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { accountId } = req.params;
-      const loans = await this.loanService.getAccountLoans(accountId);
+      const loans = await this.loanService.getAccountLoan(accountId);
       return sendResponse(StatusCodes.OK, 'Account loans fetched successfully', loans, res);
     } catch (err) {
       next(err);
