@@ -9,7 +9,7 @@ const router = Router();
 const accountController = AccountContainer.get<AccountController>(accountTypes.AccountController);
 
 router.post('/create-account', authorization, accountController.createAccount);
-router.get('/get-customer-accounts', authorization, accountController.getAccountsByCustomerId);
+router.get('/get-user-accounts', authorization, accountController.getAccountsByUserId);
 router.get('/get-accounts/:id', authorization, accountController.getAccountById);
 
 

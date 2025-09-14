@@ -44,17 +44,6 @@ export class UserController {
     }
   };
 
-  // Get is done by user id
-  getCustomerById = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const customer = await this.userService.getCustomerById((req as any).user.id);
-      return sendResponse(StatusCodes.OK, 'Customer retrieved successfully', customer, res);
-    } catch (error: any) {
-      console.log(error);
-      return next(error);
-    }
-  };
-
   deleteUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this.userService.deleteUser((req as any).user.id);
@@ -131,31 +120,11 @@ export class UserController {
     }
   };
 
-  getCustomers = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const customers = await this.userService.getCustomers();
-      return sendResponse(StatusCodes.OK, 'Customers retrieved successfully', customers, res);
-    } catch (error: any) {
-      console.log(error);
-      return next(error);
-    }
-  };
-
-  getCustomerByIdByAdmin = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const customer = await this.userService.getCustomerById(req.params.id);
-      return sendResponse(StatusCodes.OK, 'Customer retrieved successfully', customer, res);
-    } catch (error: any) {
-      console.log(error);
-      return next(error);
-    }
-  };
-
   updateUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
       req.body.avatar = req.file;
-      const success = await this.userService.updateUser(req.params.id, req.body);
-      return sendResponse(StatusCodes.OK, 'User updated successfully', null, res);
+      const result = await this.userService.updateUser(req.params.id, req.body);
+      return sendResponse(StatusCodes.OK, result, null, res);
     } catch (error: any) {
       console.log(error);
       return next(error);
@@ -164,8 +133,8 @@ export class UserController {
 
   deleteUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await this.userService.deleteUser(req.params.id);
-      return sendResponse(StatusCodes.OK, 'User deleted successfully', null, res);
+      const result = await this.userService.deleteUser(req.params.id);
+      return sendResponse(StatusCodes.OK, result, null, res);
     } catch (error: any) {
       console.log(error);
       return next(error);
@@ -174,8 +143,8 @@ export class UserController {
 
   seedAdmin = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await this.userService.seedAdmin();
-      return sendResponse(StatusCodes.CREATED, 'Admin is created', null, res);
+      const result = await this.userService.seedAdmin();
+      return sendResponse(StatusCodes.CREATED, result, null, res);
     } catch (error: any) {
       console.log(error);
       return next(error);

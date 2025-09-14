@@ -1,5 +1,4 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { Customer } from '../entities/customer.entity';
 import AppError from '../utils/appError';
 import { inject } from 'inversify';
 import { injectable } from 'inversify';
@@ -7,12 +6,12 @@ import { UserRepo } from '../repos/user.repo';
 import { User } from '../entities/user.entity';
 import { UserInput } from '../zod/user.validation';
 import userTypes from '../types/user.type';
-import uploadToCloudinary from '../utils/cloudinaryUpload';
 import { hash } from 'bcryptjs';
 import { Roles } from '../enums/roles.enum';
 import { v2 } from 'cloudinary';
 import { sendMail } from '../utils/sendMail';
 import { redis } from '../utils/redis';
+import { UploaderContext } from '../utils/uploader';
 
 @injectable()
 export class UserService {
@@ -27,21 +26,17 @@ export class UserService {
         ReasonPhrases.BAD_REQUEST,
       );
 
-    const { secure_url, public_id } = await uploadToCloudinary(data.avatar);
+    const uploader = new UploaderContext();
+    const { secure_url, public_id } = await uploader.setStrategy('cloudinary', data.avatar);
     const hashedPassword = await hash(data.password, 10);
 
     const user = await this.repo.create({
-      username: data.username,
-      email: data.email,
-      phone: data.phone,
+      ...data,
       password: hashedPassword,
-      avatar: { url: secure_url, public_id },
-    });
-
-    await this.repo.createCustomer({
-      userId: user.id,
-      user,
-      address: data.address,
+      avatar: {
+        public_id,
+        url: secure_url,
+      },
     });
 
     return user;
@@ -60,7 +55,7 @@ export class UserService {
     return user;
   }
 
-  async updateUser(id: string, data: Partial<UserInput>): Promise<boolean> {
+  async updateUser(id: string, data: Partial<UserInput>): Promise<string> {
     const user = await this.getUserById(id);
     const updateData: Partial<User> = {};
 
@@ -77,20 +72,17 @@ export class UserService {
 
     if (data.avatar) {
       v2.api.delete_all_resources([user.avatar.public_id]);
-      const { secure_url, public_id } = await uploadToCloudinary(data.avatar);
+      const uploader = new UploaderContext();
+      const { secure_url, public_id } = await uploader.setStrategy('cloudinary', data.avatar);
       updateData.avatar = { url: secure_url, public_id };
     }
 
     await this.repo.update(id, updateData);
 
-    if (data.address) {
-      await this.repo.createCustomer({ userId: id, address: data.address });
-    }
-
-    return true;
+    return 'User updated successfully';
   }
 
-  async deleteUser(id: string): Promise<boolean> {
+  async deleteUser(id: string): Promise<string> {
     const user = await this.getUserById(id);
     if (user.role === Roles.ADMIN) {
       throw new AppError(
@@ -101,10 +93,10 @@ export class UserService {
     }
     v2.api.delete_all_resources([user.avatar.public_id]);
     await this.repo.delete(id);
-    return true;
+    return 'User deleted successfully';
   }
 
-  async seedAdmin(): Promise<boolean> {
+  async seedAdmin(): Promise<string> {
     const admin = await this.repo.findByEmail(process.env.ADMIN_EMAIL!);
     if (admin && admin.role === Roles.ADMIN) {
       throw new AppError(
@@ -121,21 +113,7 @@ export class UserService {
       phone: process.env.ADMIN_PHONE,
       role: Roles.ADMIN,
     });
-    return true;
-  }
-
-  async getCustomers(): Promise<Customer[]> {
-    const customers = await this.repo.findCustomers();
-    if (!customers.length)
-      throw new AppError('Customers not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
-    return customers;
-  }
-
-  async getCustomerById(userId: string): Promise<Customer> {
-    const customer = await this.repo.findCustomerById(userId);
-    if (!customer)
-      throw new AppError('Customer not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
-    return customer;
+    return 'Admin is created';
   }
 
   async sendVerificationCode(email: string): Promise<string> {

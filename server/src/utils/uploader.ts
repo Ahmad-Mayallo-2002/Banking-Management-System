@@ -3,7 +3,7 @@ import { CloudinaryUploader } from './cloudinaryUpload';
 import { UploadStrategy } from '../interfaces/uploader.interface';
 import { LocalUploader } from './localUploader';
 
-class UploaderContext {
+export class UploaderContext {
   private uploadStrategy: UploadStrategy;
   constructor() {
     this.uploadStrategy = this.uploadStrategy;
@@ -24,9 +24,3 @@ class UploaderContext {
     return await this.uploadStrategy.upload(file);
   }
 }
-
-const context = new UploaderContext();
-
-async (file: Express.Multer.File) => {
-  await context.setStrategy('cloudinary', file);
-};

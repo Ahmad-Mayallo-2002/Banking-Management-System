@@ -2,16 +2,18 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToOne,
+  Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
 import { Roles } from '../enums/roles.enum';
-import { Customer } from './customer.entity';
+import { Account } from './account.entity';
 
 @Entity({ name: 'users' })
 export class User {
+  @Index()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -33,11 +35,18 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   phone: string;
 
+  @Column({ name: 'address', type: 'simple-json' })
+  address: {
+    state: string;
+    city: string;
+    country: string;
+  };
+
   @Column({ type: 'enum', enum: Roles, default: Roles.CUSTOMER })
   role: Roles;
 
-  @OneToOne(() => Customer, customer => customer.user)
-  customer: Relation<Customer>;
+  @OneToMany(() => Account, account => account.user)
+  accounts: Relation<Account[]>;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

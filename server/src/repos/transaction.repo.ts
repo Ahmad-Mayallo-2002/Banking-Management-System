@@ -24,12 +24,9 @@ export class TransactionRepo {
     });
   }
 
-  async getByCustomerId(customerId: string): Promise<Transaction[]> {
+  async getByUserId(userId: string): Promise<Transaction[]> {
     return this.transactionRepo.find({
-      where: [
-        { source: { customer_id: customerId } },
-        { destination: { customer_id: customerId } },
-      ],
+      where: [{ source: { user_id: userId } }, { destination: { user_id: userId } }],
       relations: ['source', 'destination'],
     });
   }

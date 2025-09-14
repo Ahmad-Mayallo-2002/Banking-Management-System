@@ -34,7 +34,7 @@ export class TransactionController {
 
   getCustomerTransactions = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const transactions = await this.transactionService.getCustomerTransactions(
+      const transactions = await this.transactionService.getUserTransactions(
         (req as any).user.customerId,
       );
       return sendResponse(

@@ -15,25 +15,29 @@ export class AccountRepo {
   }
 
   async findAll(): Promise<Account[]> {
-    return this.accountRepo.find({ relations: ['customer'] });
+    return this.accountRepo.find({ relations: ['user'] });
   }
 
   async findById(id: string): Promise<Account | null> {
-    return this.accountRepo.findOne({ where: { id }, relations: ['customer'] });
+    return this.accountRepo.findOne({ where: { id }, relations: ['user'] });
   }
 
-  async findCustomerAccounts(customerId: string): Promise<Account[]> {
+  async findCustomerAccounts(userId: string): Promise<Account[]> {
     return await this.accountRepo.find({
-      where: { customer_id: customerId },
-      relations: ['customers'],
+      where: { user_id: userId },
+      relations: ['user'],
     });
+  }
+
+  async updateAccountAmount(id: string, account: Account): Promise<void> {
+    await this.accountRepo.save(this.accountRepo.merge(account));
   }
 
   async updateActivation(id: string, isActive: boolean): Promise<void> {
     await this.accountRepo.update({ id }, { isActive });
   }
 
-  async deleteByIdAndCustomer(id: string, customerId: string): Promise<void> {
-    await this.accountRepo.delete({ id, customer_id: customerId });
+  async deleteByIdAndCustomer(id: string, userId: string): Promise<void> {
+    await this.accountRepo.delete({ id, user_id: userId });
   }
 }

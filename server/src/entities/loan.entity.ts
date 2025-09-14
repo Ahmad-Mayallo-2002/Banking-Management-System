@@ -26,6 +26,9 @@ export class Loan {
   @Column({ name: 'repaid_amount', type: 'decimal', default: 0 })
   repaidAmount: number;
 
+  @Column({ type: 'varchar', length: 255 })
+  account_id: string;
+
   @ManyToOne(() => Account, account => account.loans, { onDelete: 'CASCADE' })
   @JoinColumn()
   account: Relation<Account>;

@@ -9,8 +9,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TransactionStatus, TransactionType } from '../enums/transactions.enum';
-import { Customer } from './customer.entity';
-import { Loan } from './loan.entity';
 import { Account } from './account.entity';
 
 @Entity({ name: 'transactions' })
@@ -27,12 +25,15 @@ export class Transaction {
   @Column({ type: 'enum', enum: TransactionStatus, default: TransactionStatus.PENDING })
   status: TransactionStatus;
 
-  @Column({ type: 'varchar', length: 255 })
-  account_id: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  source_id: string;
 
   @ManyToOne(() => Account, account => account.source, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn()
   source: Relation<Account>;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  destination_id: string;
 
   @ManyToOne(() => Account, account => account.destination, {
     onDelete: 'SET NULL',

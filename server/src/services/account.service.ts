@@ -11,11 +11,11 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 export class AccountService {
   constructor(@inject(accountTypes.AccountRepo) private accountRepo: AccountRepo) {}
 
-  async createAccount(customerId: string, password: string): Promise<Account> {
+  async createAccount(userId: string, password: string): Promise<Account> {
     const hashedPassword = await hash(password, 10);
     return this.accountRepo.createAndSave({
       password: hashedPassword,
-      customer_id: customerId,
+      user_id: userId,
     });
   }
 
@@ -33,8 +33,8 @@ export class AccountService {
     return account;
   }
 
-  async getAccountsByCustomerId(customerId: string): Promise<Account[]> {
-    const accounts: Account[] = await this.accountRepo.findCustomerAccounts(customerId);
+  async getAccountsByUserId(userId: string): Promise<Account[]> {
+    const accounts: Account[] = await this.accountRepo.findCustomerAccounts(userId);
     if (!accounts.length)
       throw new AppError('No accounts found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     return accounts;
@@ -46,9 +46,15 @@ export class AccountService {
     return `Account is ${isActive ? 'active' : 'not active'}`;
   }
 
-  async deleteAccount(id: string, customerId: string): Promise<string> {
+  async updateAccountAmount(id: string, account: Account): Promise<string> {
+    await this.accountRepo.findById(id);
+    await this.accountRepo.updateAccountAmount(id, account);
+    return 'Account amount is updated successfully';
+  }
+
+  async deleteAccount(id: string, userId: string): Promise<string> {
     await this.getAccountById(id);
-    await this.accountRepo.deleteByIdAndCustomer(id, customerId);
-    return 'Account is deleted'
+    await this.accountRepo.deleteByIdAndCustomer(id, userId);
+    return 'Account is deleted';
   }
 }

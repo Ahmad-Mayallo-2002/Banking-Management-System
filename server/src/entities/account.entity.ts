@@ -2,18 +2,20 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { Customer } from './customer.entity';
 import { Transaction } from './transaction.entity';
 import { Loan } from './loan.entity';
+import { User } from './user.entity';
 
 @Entity({ name: 'accounts' })
 export class Account {
+  @Index()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -27,10 +29,10 @@ export class Account {
   password: string;
 
   @Column({ type: 'varchar', length: 255 })
-  customer_id: string;
+  user_id: string;
 
-  @ManyToOne(() => Customer, customer => customer.accounts, { onDelete: 'CASCADE' })
-  customer: Relation<Customer>;
+  @ManyToOne(() => User, user => user.accounts, { onDelete: 'CASCADE' })
+  user: Relation<User>;
 
   @OneToMany(() => Transaction, transaction => transaction.source)
   source: Relation<Transaction[]>;

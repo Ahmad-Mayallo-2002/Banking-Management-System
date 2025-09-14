@@ -41,9 +41,9 @@ export class AccountController {
     }
   };
 
-  getAccountsByCustomerId = async (req: Request, res: Response, next: NextFunction) => {
+  getAccountsByUserId = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const accounts = await this.accountService.getAccountsByCustomerId((req as any).user.customerId);
+      const accounts = await this.accountService.getAccountsByUserId((req as any).user.customerId);
       return sendResponse(StatusCodes.OK, 'Customer accounts retrieved', accounts, res);
     } catch (error) {
       next(error);
