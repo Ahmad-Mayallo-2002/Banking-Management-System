@@ -28,15 +28,22 @@ export class LoanService {
     return loan;
   }
 
-  async getAccountLoans(accountId: string): Promise<Loan[]> {
+  async getAccountLoan(accountId: string): Promise<Loan> {
     const loans = await this.loanRepo.getByAccountId(accountId);
-    if (!loans.length)
+    if (!loans)
       throw new AppError(
         'No loans found for this account',
         StatusCodes.NOT_FOUND,
         ReasonPhrases.NOT_FOUND,
       );
     return loans;
+  }
+
+  async updateBorrowedAmount(id: string, amount: number): Promise<string> {
+    const loan = await this.getLoanById(id);
+    loan.borrowedAmount += amount;
+    await this.loanRepo.save(loan);
+    return 'You taked a loan successfully';
   }
 
   async deleteLoan(id: string): Promise<string> {

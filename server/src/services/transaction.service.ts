@@ -63,10 +63,26 @@ export class TransactionService {
   async create(input: Partial<Transaction>): Promise<string> {
     const { type, amount, source_id, destination_id } = input;
 
-    if (!amount)
-      throw new AppError('Not enough balance', StatusCodes.BAD_REQUEST, ReasonPhrases.BAD_REQUEST);
+    if (!amount) {
+      throw new AppError(
+        'Transaction amount must be greater than zero',
+        StatusCodes.BAD_REQUEST,
+        ReasonPhrases.BAD_REQUEST,
+      );
+    }
 
     const account = await this.accountService.getAccountById(source_id as string);
+
+    // Helper function to create a transaction record
+    const recordTransaction = async (extra: Partial<Transaction> = {}) =>
+      this.transactionRepo.create({
+        type,
+        amount,
+        status: TransactionStatus.COMPLETED,
+        source: account,
+        source_id,
+        ...extra,
+      });
 
     if (type === TransactionType.DEPOSIT || type === TransactionType.WITHDRAWAL) {
       if (type === TransactionType.WITHDRAWAL && amount > account.amount) {
@@ -78,26 +94,42 @@ export class TransactionService {
       }
 
       account.amount += type === TransactionType.DEPOSIT ? amount : -amount;
-      await this.accountService.updateAccountAmount(source_id as string, account);
-
-      await this.transactionRepo.create({
-        type,
-        amount,
-        status: TransactionStatus.COMPLETED,
-        source: account,
-        source_id,
-      });
+      await this.accountService.updateAccountAmount(account.id, account);
+      await recordTransaction();
     } else if (type === TransactionType.TRANSFER) {
-      // Transfer logic placeholder
       const destination = await this.accountService.getAccountById(destination_id as string);
+
       account.amount -= amount;
       destination.amount += amount;
-      await this.accountService.updateAccountAmount(source_id as string, account);
-      await this.accountService.updateAccountAmount(destination.id, destination);
+
+      await Promise.all([
+        this.accountService.updateAccountAmount(account.id, account),
+        this.accountService.updateAccountAmount(destination.id, destination),
+      ]);
+
+      await recordTransaction({ destination, destination_id: destination.id });
     } else if (type === TransactionType.TAKE_LOAN) {
-      // Loan logic placeholder
+      const loan = await this.loanService.getAccountLoan(account.id);
+      loan
+        ? await this.loanService.updateBorrowedAmount(loan.id, amount)
+        : await this.loanService.createLoan({
+            borrowedAmount: amount,
+            account,
+            account_id: account.id,
+          });
+
+      await recordTransaction();
     } else if (type === TransactionType.LOAN_PAYMENT) {
-      // Loan payment logic placeholder
+      const loan = await this.loanService.getAccountLoan(account.id);
+      if (!loan)
+        throw new AppError(
+          "You don't have a loan",
+          StatusCodes.BAD_REQUEST,
+          ReasonPhrases.BAD_REQUEST,
+        );
+
+      await this.loanService.updateRepaidAmount(loan.id, amount);
+      await recordTransaction();
     } else {
       throw new AppError(
         'Invalid Transaction Type',
@@ -105,6 +137,7 @@ export class TransactionService {
         ReasonPhrases.BAD_REQUEST,
       );
     }
+
     return `${type} transaction is completed`;
   }
 }

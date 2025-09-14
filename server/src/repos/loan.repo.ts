@@ -18,8 +18,8 @@ export class LoanRepo {
     return this.loanRepo.findOne({ where: { id }, relations: ['account'] });
   }
 
-  async getByAccountId(accountId: string): Promise<Loan[]> {
-    return this.loanRepo.find({ where: { account: { id: accountId } }, relations: ['account'] });
+  async getByAccountId(accountId: string): Promise<Loan | null> {
+    return this.loanRepo.findOne({ where: { account: { id: accountId } }, relations: ['account'] });
   }
 
   async delete(id: string): Promise<void> {
@@ -27,8 +27,7 @@ export class LoanRepo {
   }
 
   async create(data: Partial<Loan>): Promise<Loan> {
-    const newLoan = this.loanRepo.create(data);
-    return this.loanRepo.save(newLoan);
+    return this.loanRepo.save(this.loanRepo.create(data));
   }
 
   async save(loan: Loan): Promise<Loan> {

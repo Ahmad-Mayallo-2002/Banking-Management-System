@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
@@ -29,7 +30,7 @@ export class Loan {
   @Column({ type: 'varchar', length: 255 })
   account_id: string;
 
-  @ManyToOne(() => Account, account => account.loans, { onDelete: 'CASCADE' })
+  @OneToOne(() => Account, account => account.loan, { onDelete: 'CASCADE' })
   @JoinColumn()
   account: Relation<Account>;
 

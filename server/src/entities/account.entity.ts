@@ -5,6 +5,7 @@ import {
   Index,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Relation,
   UpdateDateColumn,
@@ -40,8 +41,8 @@ export class Account {
   @OneToMany(() => Transaction, transaction => transaction.destination)
   destination: Relation<Transaction[]>;
 
-  @OneToMany(() => Loan, loan => loan.account)
-  loans: Relation<Loan[]>;
+  @OneToOne(() => Loan, loan => loan.account)
+  loan: Relation<Loan>;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

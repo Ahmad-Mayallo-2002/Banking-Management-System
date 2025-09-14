@@ -12,6 +12,9 @@ import { v2 } from 'cloudinary';
 import { sendMail } from '../utils/sendMail';
 import { redis } from '../utils/redis';
 import { UploaderContext } from '../utils/uploader';
+import { config } from 'dotenv';
+
+config();
 
 @injectable()
 export class UserService {
