@@ -1,0 +1,70 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Helvetica, Arial, sans-serif" />
+      <mj-text font-size="16px" color="#222" line-height="1.5" />
+    </mj-attributes>
+    <mj-style></mj-style>
+  </mj-head>
+
+  <mj-body background-color="#f3f4f6">
+    <!-- Header -->
+    <mj-section background-color="#fff" border-radius="8px 8px 0 0" padding="24px 24px 0 24px">
+      <mj-column width="64px" vertical-align="middle">
+        <mj-image
+          src="https://www.iconpacks.net/icons/1/free-bank-icon-1071-thumb.png"
+          alt="Bank logo"
+          width="48px"
+          padding="0"
+        />
+      </mj-column>
+      <mj-column vertical-align="middle">
+        <mj-text font-size="28px" font-weight="700" color="#0b3d6f" padding="0">
+          BANKING SYSTEM
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Divider -->
+    <mj-section background-color="#fff" padding="0 24px 16px 24px">
+      <mj-column>
+        <mj-divider border-width="12px" border-color="#123768" padding="0" padding-top="12px" />
+      </mj-column>
+    </mj-section>
+
+    <!-- Body -->
+    <mj-section background-color="#fff" padding="0px 24px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="700" color="#111" padding-bottom="8px">
+          Dear Customer,
+        </mj-text>
+
+        <mj-text font-size="18px" font-weight="700" color="#111" padding-bottom="8px"
+          >{{code}}</mj-text
+        >
+
+        <mj-text padding-bottom="12px">
+          This is your verification code to reset your password don't share it.
+        </mj-text>
+
+        <mj-text padding-bottom="20px"> Best regards,<br />Banking System Team </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer Divider -->
+    <mj-section background-color="#fff" padding="0 12px">
+      <mj-column>
+        <mj-divider border-width="1px" border-color="#e6e6e6" />
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section padding-top="12px" background-color="#fff">
+      <mj-column padding-left="24px">
+        <mj-text font-size="13px" color="#666"> 1234 Street Name, City, State 12345 </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
+
+<!-- https://www.iconpacks.net/icons/1/free-bank-icon-1071-thumb.png -->

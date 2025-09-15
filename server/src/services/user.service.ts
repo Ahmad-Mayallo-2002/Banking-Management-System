@@ -121,7 +121,7 @@ export class UserService {
 
   async sendVerificationCode(email: string): Promise<string> {
     const user = await this.repo.findByEmail(email);
-    if (!user) throw new AppError('User not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    // if (!user) throw new AppError('User not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
     const code = await sendMail(email);
     await redis.set('code', code);
     await redis.set('email', email);
