@@ -22,3 +22,10 @@ export const userInputSchema = z.object({
 
 // Infer TypeScript type from schema (optional, keeps in sync with validation)
 export type UserInput = z.infer<typeof userInputSchema>;
+
+export const loginInput = z.object({
+  email: z.email({ error: 'Invalid email syntax', pattern: /^[A-Za-z]{5,20}[0-9]*@gmail\.com$/ }),
+  password: z.string('Password is required').min(6, 'Password must be at least 6 characters long'),
+});
+
+export type LoginInput = z.infer<typeof loginInput>;

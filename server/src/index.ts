@@ -8,11 +8,8 @@ import globalErrorHandler from './utils/errorHandler';
 import { AppDataSource } from './data-source';
 import sendResponse from './utils/response';
 import apiLogger from './middlewares/api-logger.middleware';
-import user from './user/user.route';
-import account from './account/account.route';
-import transaction from './transaction/transaction.route';
-import loan from './loan/loan.route';
 import { StatusCodes } from 'http-status-codes';
+import user from './user/user.route';
 import {
   addTransactionalDataSource,
   initializeTransactionalContext,
@@ -42,10 +39,8 @@ app.use(
   }),
 );
 app.use(apiLogger);
+
 app.use('/api', user);
-app.use('/api', account);
-app.use('/api', transaction);
-app.use('/api', loan);
 
 AppDataSource.initialize();
 

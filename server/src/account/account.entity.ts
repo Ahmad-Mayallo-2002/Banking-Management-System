@@ -23,14 +23,17 @@ export class Account {
   @Column({ type: 'decimal', default: 0 })
   amount: number;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
+
+  @Column({ name: 'account_number', type: 'varchar', length: 19, unique: true })
+  accountNumber: string;
 
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  user_id: string;
+  @Column({ name: 'user_id', type: 'varchar', length: 255 })
+  userId: string;
 
   @ManyToOne(() => User, user => user.accounts, { onDelete: 'CASCADE' })
   user: Relation<User>;

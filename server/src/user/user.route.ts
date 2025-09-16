@@ -1,33 +1,21 @@
-import { Router } from 'express';
-import userTypes from '../types/user.type';
-import upload from '../middlewares/multer.middleware';
-import isAdmin from '../middlewares/is-admin.middleware';
-import authorization from '../middlewares/authorization.middleware';
-import UserContainer from './user.config';
-import { UserController } from './user.controller';
+import { Router } from "express";
+import authorization from "../middlewares/authorization.middleware";
+import isAdmin from "../middlewares/is-admin.middleware";
+import userContainer from "./user.config";
+import userTypes from "../types/user.type";
+import { UserController } from "./user.controller";
 
 const router = Router();
-const userController = UserContainer.get<UserController>(userTypes.UserController);
+const controller = userContainer.get<UserController>(userTypes.UserController);
 
-router.post('/sign-up', upload.single('avatar'), userController.createUser);
-router.get('/get-user', authorization, userController.getUserById);
-router.delete('/delete-user', authorization, userController.deleteUser);
-router.put('/update-user', authorization, upload.single('avatar'), userController.updateUser);
-router.post('/seed-admin', userController.seedAdmin);
-router.post('/send-verification-code', userController.sendVerificationCode);
-router.post('/validate-code', userController.validateCode);
-router.put('/update-password', userController.updatePassword);
+router.get("/get-user", authorization, controller.getByIdByUser);
+router.delete("/delete-user", authorization, controller.deleteByUser);
+router.put("/update-user", authorization, controller.updateByUser);
 
-// Admin APIs
-router.get('/get-users', authorization, isAdmin, userController.getUsers);
-router.get('/get-users/:id', authorization, isAdmin, userController.getUserByIdByAdmin);
-router.delete('/delete-user/:id', authorization, isAdmin, userController.deleteUserByAdmin);
-router.put(
-  '/update-user/:id',
-  authorization,
-  isAdmin,
-  upload.single('avatar'),
-  userController.updateUserByAdmin,
-);
+// For Admin Only
+router.get("/get-users", authorization, isAdmin, controller.getAll);
+router.get("/get-users/:id", authorization, isAdmin, controller.getByIdByAdmin);
+router.delete("/delete-user/:id", authorization, isAdmin, controller.deleteByAdmin);
+router.put("/update-user/:id", authorization, isAdmin, controller.updateByAdmin);
 
 export default router;

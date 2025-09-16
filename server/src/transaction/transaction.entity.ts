@@ -25,8 +25,8 @@ export class Transaction {
   @Column({ type: 'enum', enum: TransactionStatus, default: TransactionStatus.PENDING })
   status: TransactionStatus;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  source_id: string;
+  @Column({ name: 'source_id', type: 'varchar', length: 255, nullable: true })
+  sourceId: string;
 
   @ManyToOne(() => Account, account => account.source, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn()
