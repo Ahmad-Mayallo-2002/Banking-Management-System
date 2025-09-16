@@ -1,9 +1,9 @@
 import { Router } from "express";
-import LoanContainer from "../inversify/loan.config";
-import { LoanController } from "../controllers/loan.controller";
 import loanTypes from "../types/loan.type";
 import authorization from "../middlewares/authorization.middleware";
 import isAdmin from "../middlewares/is-admin.middleware";
+import LoanContainer from "./loan.config";
+import { LoanController } from "./loan.controller";
 
 const router = Router();
 const loanController = LoanContainer.get<LoanController>(loanTypes.LoanController);

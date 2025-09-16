@@ -1,8 +1,8 @@
 import { Container } from 'inversify';
-import { LoanRepo } from '../repos/loan.repo';
 import loanTypes from '../types/loan.type';
-import { LoanService } from '../services/loan.service';
-import { LoanController } from '../controllers/loan.controller';
+import { LoanRepo } from './loan.repo';
+import { LoanService } from './loan.service';
+import { LoanController } from './loan.controller';
 
 const LoanContainer = new Container();
 

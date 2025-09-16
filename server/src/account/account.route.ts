@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import AccountContainer from '../inversify/account.config';
-import { AccountController } from '../controllers/account.controller';
 import authorization from '../middlewares/authorization.middleware';
 import isAdmin from '../middlewares/is-admin.middleware';
 import accountTypes from '../types/account.type';
+import AccountContainer from './account.config';
+import { AccountController } from './account.controller';
 
 const router = Router();
 const accountController = AccountContainer.get<AccountController>(accountTypes.AccountController);

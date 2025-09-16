@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { Repository } from 'typeorm';
-import { Account } from '../entities/account.entity';
 import { AppDataSource } from '../data-source';
+import { Account } from './account.entity';
 
 @injectable()
 export class AccountRepo {

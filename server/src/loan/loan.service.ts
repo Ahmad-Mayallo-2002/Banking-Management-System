@@ -1,10 +1,10 @@
 import { inject } from 'inversify';
 import { injectable } from 'inversify';
 import loanTypes from '../types/loan.type';
-import { LoanRepo } from '../repos/loan.repo';
-import { Loan } from '../entities/loan.entity';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../utils/appError';
+import { LoanRepo } from './loan.repo';
+import { Loan } from './loan.entity';
 
 @injectable()
 export class LoanService {

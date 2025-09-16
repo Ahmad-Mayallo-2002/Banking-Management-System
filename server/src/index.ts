@@ -8,10 +8,10 @@ import globalErrorHandler from './utils/errorHandler';
 import { AppDataSource } from './data-source';
 import sendResponse from './utils/response';
 import apiLogger from './middlewares/api-logger.middleware';
-import user from './routes/user.route';
-import account from './routes/account.route';
-import transaction from './routes/transaction.route';
-import loan from './routes/loan.route';
+import user from './user/user.route';
+import account from './account/account.route';
+import transaction from './transaction/transaction.route';
+import loan from './loan/loan.route';
 import { StatusCodes } from 'http-status-codes';
 import {
   addTransactionalDataSource,

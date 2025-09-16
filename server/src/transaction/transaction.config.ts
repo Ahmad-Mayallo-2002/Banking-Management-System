@@ -1,14 +1,14 @@
 import { Container } from 'inversify';
-import { TransactionRepo } from '../repos/transaction.repo';
 import transactionTypes from '../types/transaction.type';
-import { TransactionService } from '../services/transaction.service';
-import { TransactionController } from '../controllers/transaction.controller';
-import { LoanService } from '../services/loan.service';
 import loanTypes from '../types/loan.type';
-import { LoanRepo } from '../repos/loan.repo';
 import accountTypes from '../types/account.type';
-import { AccountService } from '../services/account.service';
-import { AccountRepo } from '../repos/account.repo';
+import { TransactionRepo } from './transaction.repo';
+import { TransactionService } from './transaction.service';
+import { TransactionController } from './transaction.controller';
+import { LoanService } from '../loan/loan.service';
+import { LoanRepo } from '../loan/loan.repo';
+import { AccountService } from '../account/account.service';
+import { AccountRepo } from '../account/account.repo';
 
 const TransactionContainer = new Container();
 

@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { Repository } from 'typeorm';
-import { Loan } from '../entities/loan.entity';
 import { AppDataSource } from '../data-source';
+import { Loan } from './loan.entity';
 
 @injectable()
 export class LoanRepo {

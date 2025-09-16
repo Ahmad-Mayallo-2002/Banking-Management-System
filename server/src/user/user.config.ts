@@ -1,8 +1,8 @@
 import { Container } from 'inversify';
-import { UserRepo } from '../repos/user.repo';
 import userTypes from '../types/user.type';
-import { UserService } from '../services/user.service';
-import { UserController } from '../controllers/user.controller';
+import { UserRepo } from './user.repo';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 
 const UserContainer = new Container();
 

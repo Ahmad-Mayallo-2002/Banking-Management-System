@@ -1,11 +1,11 @@
 import { inject } from 'inversify';
 import { injectable } from 'inversify';
 import accountTypes from '../types/account.type';
-import { AccountRepo } from '../repos/account.repo';
 import { hash } from 'bcryptjs';
-import { Account } from '../entities/account.entity';
 import AppError from '../utils/appError';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { Account } from './account.entity';
+import { AccountRepo } from './account.repo';
 
 @injectable()
 export class AccountService {

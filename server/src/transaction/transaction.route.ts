@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import TransactionContainer from '../inversify/transaction.config';
-import { TransactionController } from '../controllers/transaction.controller';
 import transactionTypes from '../types/transaction.type';
 import authorization from '../middlewares/authorization.middleware';
 import isAdmin from '../middlewares/is-admin.middleware';
+import TransactionContainer from './transaction.config';
+import { TransactionController } from './transaction.controller';
 
 const router = Router();
 const transactionController = TransactionContainer.get<TransactionController>(

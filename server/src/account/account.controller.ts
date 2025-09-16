@@ -1,11 +1,11 @@
 import { inject } from 'inversify';
 import { injectable } from 'inversify';
 import accountTypes from '../types/account.type';
-import { AccountService } from '../services/account.service';
 import { NextFunction, Request, Response } from 'express';
-import { Account } from '../entities/account.entity';
 import sendResponse from '../utils/response';
 import { StatusCodes } from 'http-status-codes';
+import { AccountService } from './account.service';
+import { Account } from './account.entity';
 
 @injectable()
 export class AccountController {

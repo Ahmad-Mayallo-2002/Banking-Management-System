@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserService } from '../services/user.service';
 import sendResponse from '../utils/response';
 import { StatusCodes } from 'http-status-codes';
 import { injectable } from 'inversify';
@@ -7,6 +6,7 @@ import { inject } from 'inversify';
 import userTypes from '../types/user.type';
 import { userInputSchema } from '../zod/user.validation';
 import { ZodError } from 'zod';
+import { UserService } from './user.service';
 
 @injectable()
 export class UserController {

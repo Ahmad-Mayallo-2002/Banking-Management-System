@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { TransactionStatus, TransactionType } from '../enums/transactions.enum';
-import { Account } from './account.entity';
+import { Account } from '../account/account.entity';
 
 @Entity({ name: 'transactions' })
 export class Transaction {

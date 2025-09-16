@@ -1,16 +1,16 @@
 import { inject } from 'inversify';
 import { injectable } from 'inversify';
 import transactionTypes from '../types/transaction.type';
-import { TransactionRepo } from '../repos/transaction.repo';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../utils/appError';
 import { TransactionStatus, TransactionType } from '../enums/transactions.enum';
-import { Transaction } from '../entities/transaction.entity';
 import loanTypes from '../types/loan.type';
-import { LoanService } from './loan.service';
 import accountTypes from '../types/account.type';
-import { AccountService } from './account.service';
 import { Transactional } from 'typeorm-transactional';
+import { TransactionRepo } from './transaction.repo';
+import { LoanService } from '../loan/loan.service';
+import { AccountService } from '../account/account.service';
+import { Transaction } from './transaction.entity';
 
 @injectable()
 export class TransactionService {

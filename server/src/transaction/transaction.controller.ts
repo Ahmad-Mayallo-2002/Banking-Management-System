@@ -1,11 +1,11 @@
 import { inject } from 'inversify';
 import { injectable } from 'inversify';
 import transactionTypes from '../types/transaction.type';
-import { TransactionService } from '../services/transaction.service';
 import { NextFunction, Request, Response } from 'express';
 import { TransactionStatus } from '../enums/transactions.enum';
 import sendResponse from '../utils/response';
 import { StatusCodes } from 'http-status-codes';
+import { TransactionService } from './transaction.service';
 
 @injectable()
 export class TransactionController {

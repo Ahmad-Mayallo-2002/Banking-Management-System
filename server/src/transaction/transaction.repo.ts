@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 import { Repository } from 'typeorm';
-import { Transaction } from '../entities/transaction.entity';
 import { AppDataSource } from '../data-source';
 import { TransactionStatus } from '../enums/transactions.enum';
+import { Transaction } from './transaction.entity';
 
 @injectable()
 export class TransactionRepo {

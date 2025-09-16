@@ -1,8 +1,8 @@
 import { Container } from 'inversify';
-import { AccountRepo } from '../repos/account.repo';
 import accountTypes from '../types/account.type';
-import { AccountService } from '../services/account.service';
-import { AccountController } from '../controllers/account.controller';
+import { AccountRepo } from './account.repo';
+import { AccountService } from './account.service';
+import { AccountController } from './account.controller';
 
 const AccountContainer = new Container();
 

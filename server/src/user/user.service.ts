@@ -2,8 +2,6 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../utils/appError';
 import { inject } from 'inversify';
 import { injectable } from 'inversify';
-import { UserRepo } from '../repos/user.repo';
-import { User } from '../entities/user.entity';
 import { UserInput } from '../zod/user.validation';
 import userTypes from '../types/user.type';
 import { hash } from 'bcryptjs';
@@ -13,6 +11,8 @@ import { sendMail } from '../utils/sendMail';
 import { redis } from '../utils/redis';
 import { UploaderContext } from '../utils/uploader';
 import { config } from 'dotenv';
+import { UserRepo } from './user.repo';
+import { User } from './user.entity';
 
 config();
 

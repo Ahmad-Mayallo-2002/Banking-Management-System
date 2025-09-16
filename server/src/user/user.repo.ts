@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
 import { AppDataSource } from '../data-source';
 import { injectable } from 'inversify';
+import { User } from './user.entity';
 
 @injectable()
 export class UserRepo {

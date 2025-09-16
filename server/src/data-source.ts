@@ -1,9 +1,9 @@
 import { config } from 'dotenv';
 import { DataSource } from 'typeorm';
-import { User } from './entities/user.entity';
-import { Account } from './entities/account.entity';
-import { Loan } from './entities/loan.entity';
-import { Transaction } from './entities/transaction.entity';
+import { User } from './user/user.entity';
+import { Account } from './account/account.entity';
+import { Loan } from './loan/loan.entity';
+import { Transaction } from './transaction/transaction.entity';
 
 config();
 

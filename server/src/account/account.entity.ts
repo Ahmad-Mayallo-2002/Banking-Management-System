@@ -10,9 +10,9 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { Transaction } from './transaction.entity';
-import { Loan } from './loan.entity';
-import { User } from './user.entity';
+import { User } from '../user/user.entity';
+import { Transaction } from '../transaction/transaction.entity';
+import { Loan } from '../loan/loan.entity';
 
 @Entity({ name: 'accounts' })
 export class Account {
