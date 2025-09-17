@@ -45,8 +45,9 @@ export class AccountController {
 
   getAccountsByUserId = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { userId } = req.params;
-      const result = await this.accountService.getAccountsByUserId(userId);
+      const { userId: ownerId } = req.params;
+      const { role, userId } = (req as any).user;
+      const result = await this.accountService.getAccountsByUserId(ownerId, role, userId);
       return sendResponse(StatusCodes.OK, ReasonPhrases.OK, result, res);
     } catch (error) {
       return next(error);

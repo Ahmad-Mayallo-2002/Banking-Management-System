@@ -43,10 +43,13 @@ export class AccountService {
     return account;
   }
 
-  async getAccountsByUserId(userId: string): Promise<Account[]> {
+  async getAccountsByUserId(userId: string, role: Roles, ownerId: string): Promise<Account[]> {
     const accounts = await this.accountRepo.find({ where: { userId } });
-    if (accounts.length === 0)
+    if (!accounts.length)
       throw new AppError('No accounts found for this user', NOT_FOUND, ReasonPhrases.NOT_FOUND);
+    if (accounts[0].userId !== ownerId && role !== Roles.ADMIN)
+      throw new AppError('Access is denied', FORBIDDEN, ReasonPhrases.FORBIDDEN);
+
     return accounts;
   }
 
