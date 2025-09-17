@@ -9,15 +9,17 @@ import { AppDataSource } from './data-source';
 import sendResponse from './utils/response';
 import apiLogger from './middlewares/api-logger.middleware';
 import { StatusCodes } from 'http-status-codes';
-import user from './user/user.route';
 import {
   addTransactionalDataSource,
   initializeTransactionalContext,
   StorageDriver,
 } from 'typeorm-transactional';
+import user from './user/user.route';
 import auth from './auth/auth.route';
+import account from './account/account.route';
 config();
 
+// Initialization for TypeORM Transaction
 initializeTransactionalContext({ storageDriver: StorageDriver.ASYNC_LOCAL_STORAGE });
 addTransactionalDataSource(AppDataSource);
 
@@ -41,8 +43,10 @@ app.use(
 );
 app.use(apiLogger);
 
+// Routes
 app.use('/api', user);
 app.use('/api', auth);
+app.use('/api', account);
 
 AppDataSource.initialize();
 
