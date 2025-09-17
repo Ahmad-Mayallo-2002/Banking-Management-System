@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 import { User } from './user.entity';
 import AppError from '../utils/appError';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { UserInput } from './zod/user.validation';
+import { UserInput } from './zod/user.zod';
 import { UploaderContext } from '../utils/uploader';
 import { v2 } from 'cloudinary';
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import authorization from "../middlewares/authorization.middleware";
 import isAdmin from "../middlewares/is-admin.middleware";
-import userContainer from "./user.config";
+import userContainer from "./user.container";
 import userTypes from "../types/user.type";
 import { UserController } from "./user.controller";
 

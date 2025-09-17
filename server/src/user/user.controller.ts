@@ -5,7 +5,7 @@ import userTypes from '../types/user.type';
 import { NextFunction, Request, Response } from 'express';
 import sendResponse from '../utils/response';
 import { StatusCodes } from 'http-status-codes';
-import { userInputSchema } from './zod/user.validation';
+import { userInputSchema } from './zod/user.zod';
 import { ZodError } from 'zod';
 
 @injectable()

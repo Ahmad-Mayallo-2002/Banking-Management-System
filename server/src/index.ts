@@ -15,6 +15,7 @@ import {
   initializeTransactionalContext,
   StorageDriver,
 } from 'typeorm-transactional';
+import auth from './auth/auth.route';
 config();
 
 initializeTransactionalContext({ storageDriver: StorageDriver.ASYNC_LOCAL_STORAGE });
@@ -41,6 +42,7 @@ app.use(
 app.use(apiLogger);
 
 app.use('/api', user);
+app.use('/api', auth);
 
 AppDataSource.initialize();
 

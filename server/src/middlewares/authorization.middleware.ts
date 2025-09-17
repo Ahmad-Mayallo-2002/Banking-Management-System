@@ -28,9 +28,8 @@ function authorization(req: Request, res: Response, next: NextFunction) {
         ),
       );
     }
-
-    console.log(decoded);
-    // req.user = decoded;
+    (req as any).user = decoded;
+    (req as any).user.token = token;
     next();
   });
 }
