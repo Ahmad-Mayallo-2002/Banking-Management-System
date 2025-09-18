@@ -8,7 +8,7 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { TransactionStatus, TransactionType } from '../enums/transactions.enum';
+import { TransactionType } from '../enums/transactions.enum';
 import { Account } from '../account/account.entity';
 
 @Entity({ name: 'transactions' })
@@ -21,9 +21,6 @@ export class Transaction {
 
   @Column({ type: 'enum', enum: TransactionType })
   type: TransactionType;
-
-  @Column({ type: 'enum', enum: TransactionStatus, default: TransactionStatus.PENDING })
-  status: TransactionStatus;
 
   @Column({ name: 'source_id', type: 'varchar', length: 255, nullable: true })
   sourceId: string;

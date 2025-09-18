@@ -5,9 +5,3 @@ export enum TransactionType {
   LOAN_PAYMENT = 'LOAN_PAYMENT',
   TAKE_LOAN = 'TAKE_LOAN',
 }
-
-export enum TransactionStatus {
-  PENDING = 'pending',
-  COMPLETED = 'completed',
-  FAILED = 'failed',
-}
