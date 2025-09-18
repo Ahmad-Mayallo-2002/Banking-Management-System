@@ -25,9 +25,6 @@ export class LoanService {
   async getLoanById(id: string, ownerId: string, role: Roles): Promise<Loan> {
     const loan = await this.loanRepo.findOne({ where: { id } });
     if (!loan) throw new AppError('Loan not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
-    const account = await this.accountRepo.findOneBy({ id: loan.accountId });
-    if (ownerId !== account?.userId && role !== Roles.ADMIN)
-      throw new AppError('Access is denied', StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
     return loan;
   }
 
@@ -39,9 +36,6 @@ export class LoanService {
         StatusCodes.NOT_FOUND,
         ReasonPhrases.NOT_FOUND,
       );
-    const account = await this.accountRepo.findOneBy({ id: accountId });
-    if (account?.userId !== ownerId && role !== Roles.ADMIN)
-      throw new AppError('Access is denied', StatusCodes.FORBIDDEN, ReasonPhrases.FORBIDDEN);
     return loans;
   }
 
