@@ -22,7 +22,8 @@ export class LoanController {
   getLoanById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const loan = await this.loanService.getLoanById(id);
+      const user = (req as any).user;
+      const loan = await this.loanService.getLoanById(id, user.userId, user.role);
       return sendResponse(StatusCodes.OK, ReasonPhrases.OK, loan, res);
     } catch (err) {
       return next(err);
@@ -32,7 +33,8 @@ export class LoanController {
   getLoansByAccountId = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { accountId } = req.params;
-      const loans = await this.loanService.getLoansByAccountId(accountId);
+      const user = (req as any).user;
+      const loans = await this.loanService.getLoansByAccountId(accountId, user.userId, user.role);
       return sendResponse(StatusCodes.OK, ReasonPhrases.OK, loans, res);
     } catch (err) {
       return next(err);
