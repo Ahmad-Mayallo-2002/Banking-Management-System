@@ -20,6 +20,5 @@ router.get(
 // For admin only
 router.get('/get-loans', authorization, isAdmin, container.getAllLoans);
 router.delete('/delete-loan/:id', authorization, isAdmin, container.deleteLoan);
-router.put('/update-loan-status/:id', authorization, isAdmin, container.updateLoanPaymentStatus);
 
 export default router;

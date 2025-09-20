@@ -46,11 +46,53 @@ export class LoanService {
     return 'Loan deleted successfully';
   }
 
-  async updateLoanPaymentStatus(id: string, isPaid: boolean): Promise<string> {
-    const loan = await this.loanRepo.findOneBy({ id });
-    if (!loan) throw new AppError('Loan not found', StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND);
-    loan.isPaid = isPaid;
+  async takeLoan(amount: number, accountId: string): Promise<string> {
+    const loan = await this.loanRepo.findOne({ where: { accountId } });
+    if (!loan) {
+      const newLoan = this.loanRepo.create({
+        amount,
+        accountId,
+      });
+      await this.loanRepo.save(newLoan);
+    } else {
+      loan.amount += amount;
+      await this.loanRepo.save(loan);
+    }
+    return 'Loan taked successfully';
+  }
+
+  async payLoan(amount: number, accountId: string): Promise<string> {
+    const loan = await this.loanRepo.findOne({ where: { accountId } });
+
+    if (!loan)
+      throw new AppError(
+        'No loan found for this account',
+        StatusCodes.NOT_FOUND,
+        ReasonPhrases.NOT_FOUND,
+      );
+
+    if (amount <= 0) {
+      throw new AppError(
+        'Payment amount must be greater than zero',
+        StatusCodes.BAD_REQUEST,
+        ReasonPhrases.BAD_REQUEST,
+      );
+    }
+
+    if (amount > Number(loan.amount)) {
+      throw new AppError(
+        'Payment amount exceeds remaining loan balance',
+        StatusCodes.BAD_REQUEST,
+        ReasonPhrases.BAD_REQUEST,
+      );
+    }
+
+    loan.amount -= Number(loan.amount) - amount;
+
+    if (!loan.amount) return 'Loan fully repaid. Congratulations';
+
     await this.loanRepo.save(loan);
-    return `Loan now is ${isPaid ? 'paid' : 'not paid'}`;
+
+    return 'Loan payment successful';
   }
 }

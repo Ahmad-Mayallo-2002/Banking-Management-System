@@ -8,7 +8,8 @@ import {
   Relation,
   UpdateDateColumn,
 } from 'typeorm';
-import { TransactionType } from '../enums/transactions.enum';
+import {
+   TransactionType } from '../enums/transactions.enum';
 import { Account } from '../account/account.entity';
 
 @Entity({ name: 'transactions' })
@@ -29,8 +30,8 @@ export class Transaction {
   @JoinColumn()
   source: Relation<Account>;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  destination_id: string;
+  @Column({ name: 'destination_id', type: 'varchar', length: 255, nullable: true })
+  destinationId: string;
 
   @ManyToOne(() => Account, account => account.destination, {
     onDelete: 'SET NULL',

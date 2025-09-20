@@ -18,6 +18,7 @@ import user from './user/user.route';
 import auth from './auth/auth.route';
 import account from './account/account.route';
 import loan from './loan/loan.route';
+import transaction from './transaction/transaction.route';
 config();
 
 // Initialization for TypeORM Transaction
@@ -49,6 +50,7 @@ app.use('/api', user);
 app.use('/api', auth);
 app.use('/api', account);
 app.use('/api', loan);
+app.use('/api', transaction);
 
 AppDataSource.initialize();
 

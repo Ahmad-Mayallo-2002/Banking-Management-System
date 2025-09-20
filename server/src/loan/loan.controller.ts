@@ -51,14 +51,4 @@ export class LoanController {
     }
   };
 
-  updateLoanPaymentStatus = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      const { isPaid } = req.body;
-      const updatedLoan = await this.loanService.updateLoanPaymentStatus(id, isPaid);
-      return sendResponse(StatusCodes.OK, updatedLoan, updatedLoan, res);
-    } catch (err) {
-      return next(err);
-    }
-  };
 }

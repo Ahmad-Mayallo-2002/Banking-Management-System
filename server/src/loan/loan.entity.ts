@@ -17,15 +17,8 @@ export class Loan {
   id: string;
 
   // Total amount for loan
-  @Column({ name: 'borrowed_amount', type: 'decimal', default: 0 })
-  borrowedAmount: number;
-
-  @Column({ name: 'is_paid', type: 'boolean', default: false })
-  isPaid: boolean;
-
-  // Amount that customer pay it to pay loan
-  @Column({ name: 'repaid_amount', type: 'decimal', default: 0 })
-  repaidAmount: number;
+  @Column({ type: 'decimal', default: 0 })
+  amount: number;
 
   @Column({ name: 'account_id', type: 'varchar', length: 255 })
   accountId: string;
