@@ -10,6 +10,7 @@ import { TransactionInput } from './zod/create-transaction.zod';
 import { inject } from 'inversify';
 import loanTypes from '../types/loan.type';
 import { LoanService } from '../loan/loan.service';
+import { Transactional } from 'typeorm-transactional';
 
 @injectable()
 export class TransactionService {
@@ -53,6 +54,7 @@ export class TransactionService {
     return 'Transaction deleted successfully';
   }
 
+  @Transactional()
   async createTransaction(input: TransactionInput): Promise<string> {
     const { type, amount, destinationNumber, sourceNumber } = input;
     const source = await this.accountRepo.findOne({
@@ -67,19 +69,21 @@ export class TransactionService {
         StatusCodes.NOT_FOUND,
         ReasonPhrases.NOT_FOUND,
       );
+    if (type === TransactionType.DEPOSIT || type === TransactionType.WITHDRAWAL) {
+      if (!amount || amount < 0)
+        throw new AppError(
+          'Balance must be greater than zero',
+          StatusCodes.BAD_REQUEST,
+          ReasonPhrases.BAD_REQUEST,
+        );
 
-    if (type === TransactionType.DEPOSIT) {
-      source.amount += amount;
+      source.amount += type === TransactionType.DEPOSIT ? amount : -amount;
       await this.accountRepo.save(source);
-    } else if (type === TransactionType.WITHDRAWAL) {
-      source.amount -= amount;
-      await this.accountRepo.save(source);
+      return `Transaction ${type.toLowerCase()} taked successfully`;
     } else if (type === TransactionType.TAKE_LOAN) {
-      const takeLoan = await this.loanService.takeLoan(amount, source.id);
-      return takeLoan;
+      return await this.loanService.takeLoan(amount, source.id);
     } else if (type === TransactionType.LOAN_PAYMENT) {
-      const payLoan = await this.loanService.payLoan(amount, source.id);
-      return payLoan;
+      return await this.loanService.payLoan(amount, source.id);
     } else if (type === TransactionType.TRANSFER) {
       const destination = await this.accountRepo.findOne({
         where: { accountNumber: destinationNumber },
