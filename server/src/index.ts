@@ -8,7 +8,7 @@ import globalErrorHandler from './utils/errorHandler';
 import { AppDataSource } from './data-source';
 import sendResponse from './utils/response';
 import apiLogger from './middlewares/api-logger.middleware';
-import { StatusCodes } from 'http-status-codes';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import {
   addTransactionalDataSource,
   initializeTransactionalContext,
@@ -20,8 +20,6 @@ import account from './account/account.route';
 import loan from './loan/loan.route';
 import transaction from './transaction/transaction.route';
 import passport from 'passport';
-import './utils/passport';
-import { log } from 'console';
 config();
 
 // Initialization for TypeORM Transaction
@@ -74,19 +72,22 @@ app.get(
     failureRedirect: '/auth/failure',
     successRedirect: '/protected',
   }),
-  function (req, res) {
-    // Successful authentication, redirect home.
+  async (_req: Request, res: Response) => {
     res.redirect('/');
   },
 );
 
 app.get('/protected', isLoggedIn, async (req: Request, res: Response) => {
-  log(req);
-  return sendResponse(200, 'OK', `Hello, asdasdasd`, res);
+  return sendResponse(StatusCodes.OK, ReasonPhrases.OK, `Google Login is done`, res);
 });
 
 app.get('/auth/failure', async (req: Request, res: Response) => {
-  return sendResponse(400, 'Error', `something went wrong....`, res);
+  return sendResponse(
+    StatusCodes.BAD_REQUEST,
+    ReasonPhrases.BAD_REQUEST,
+    `something went wrong....`,
+    res,
+  );
 });
 
 app.get('/logout', (req: Request, res: Response, next) => {
