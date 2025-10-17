@@ -20,6 +20,7 @@ import account from './account/account.route';
 import loan from './loan/loan.route';
 import transaction from './transaction/transaction.route';
 import passport from 'passport';
+import "./utils/passport";
 config();
 
 // Initialization for TypeORM Transaction
