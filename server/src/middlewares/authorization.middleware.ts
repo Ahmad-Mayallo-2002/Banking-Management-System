@@ -1,14 +1,17 @@
-import { config } from 'dotenv';
-import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import AppError from '../utils/appError';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { NextFunction, Request, Response } from 'express';
+import { config } from 'dotenv';
+
 config();
 
-function authorization(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization;
-  const token: string | undefined = authHeader?.split(' ')[1];
-  if (!token) {
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+export default async function authorization(req: Request, res: Response, next: NextFunction) {
+  const idToken = (req?.user as any)?.idToken || req.headers.authorization?.split(' ')[1];
+
+  if (!idToken) {
     return next(
       new AppError(
         'Access denied. Token missing.',
@@ -18,20 +21,23 @@ function authorization(req: Request, res: Response, next: NextFunction) {
     );
   }
 
-  verify(token, `${process.env.JWT_SECRET}`, (err, decoded) => {
-    if (err) {
-      return next(
-        new AppError(
-          'Invalid or expired token.',
-          StatusCodes.UNAUTHORIZED,
-          ReasonPhrases.UNAUTHORIZED,
-        ),
-      );
-    }
-    (req as any).user = decoded;
-    (req as any).user.token = token;
-    next();
-  });
-}
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
 
-export default authorization;
+    (req).user = payload; // Google user info
+    (req as any).user.token = idToken;
+    next();
+  } catch (err) {
+    return next(
+      new AppError(
+        'Invalid or expired Google token.',
+        StatusCodes.UNAUTHORIZED,
+        ReasonPhrases.UNAUTHORIZED,
+      ),
+    );
+  }
+}

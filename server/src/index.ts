@@ -20,7 +20,7 @@ import account from './account/account.route';
 import loan from './loan/loan.route';
 import transaction from './transaction/transaction.route';
 import passport from 'passport';
-import "./utils/passport";
+import './utils/passport';
 config();
 
 // Initialization for TypeORM Transaction
@@ -79,6 +79,7 @@ app.get(
 );
 
 app.get('/protected', isLoggedIn, async (req: Request, res: Response) => {
+  console.log(req.user as any);
   return sendResponse(StatusCodes.OK, ReasonPhrases.OK, `Google Login is done`, res);
 });
 
