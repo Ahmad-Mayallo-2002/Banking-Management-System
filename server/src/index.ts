@@ -21,6 +21,9 @@ import loan from './loan/loan.route';
 import transaction from './transaction/transaction.route';
 import passport from 'passport';
 import './utils/passport';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import authorization from './middlewares/authorization.middleware';
 config();
 
 // Initialization for TypeORM Transaction
@@ -49,6 +52,19 @@ app.use(apiLogger);
 app.use(passport.initialize());
 app.use(passport.session());
 
+const server = createServer(app);
+const io = new Server(server, {
+  cors: { origin: '*' },
+});
+
+io.on('connection', socket => {
+  console.log('Client connected: ', socket.id);
+
+  socket.on('disconnected', () => {
+    console.log('Client disconnected: ', socket.id);
+  });
+});
+
 // Routes
 app.use('/api', user);
 app.use('/api', auth);
@@ -57,10 +73,6 @@ app.use('/api', loan);
 app.use('/api', transaction);
 
 AppDataSource.initialize();
-
-function isLoggedIn(req: Request, res: Response, next: NextFunction) {
-  req.user ? next() : res.sendStatus(401);
-}
 
 app.get(
   '/auth/google',
@@ -78,7 +90,7 @@ app.get(
   },
 );
 
-app.get('/protected', isLoggedIn, async (req: Request, res: Response) => {
+app.get('/protected', authorization, async (req: Request, res: Response) => {
   console.log(req.user as any);
   return sendResponse(StatusCodes.OK, ReasonPhrases.OK, `Google Login is done`, res);
 });
